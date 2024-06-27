@@ -4,10 +4,11 @@ from pydantic import BaseModel
 from bs4 import BeautifulSoup as bs
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from app.LLM import LLM
 
 app = FastAPI()
 
-origins = ["http://localhost:8080"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,6 +19,8 @@ app.add_middleware(
 )
 
 security = HTTPBasic()
+
+llm = LLM()
 
 
 @app.get("/api/llm/{item_id}")
@@ -43,5 +46,5 @@ def remove_html_tags(text):
 @app.post("/api/llm/{post_id}")
 def summerize_post(post_id: int, post: Post):
     raw_content = post.content
-    clean_text = remove_html_tags(raw_content)
+    clean_text = llm.summarize_text(raw_content)
     return {"id": post_id, "content": clean_text, "raw_content": raw_content}
