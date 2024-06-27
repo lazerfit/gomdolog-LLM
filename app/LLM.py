@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup as bs
 
 
 class LLM:
-    llm = ChatOpenAI(openai_api_key=os.environ["OPENAI_API_KEY"])
+    llm = ChatOpenAI(openai_api_key=os.getenv("OPENAI_API_KEY"))
     prompt = ChatPromptTemplate.from_messages(
         [
             (
